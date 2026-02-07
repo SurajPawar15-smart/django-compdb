@@ -24,35 +24,49 @@ class RegisterSerializer(serializers.ModelSerializer):
 #     username = serializers.CharField()
 #     password = serializers.CharField()
 
+from rest_framework import serializers
+from .models import Department, Employee
+
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
-        fields = [
-            'department_id',
-            'department_name',
-            'description',
-            'created_at',
-        ]
-class EmployeeSerializer(serializers.ModelSerializer):
-    department_name = serializers.CharField(
-        source='department.department_name',
-        read_only=True
-    )
+        fields = '__all__'
 
+
+class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
-        fields = [
-            'employee_id',
-            'employee_name',
-            'email',
-            'phone',
-            'designation',
-            'salary',
-            'date_of_joining',
-            'department',
-            'department_name',
-            'photo',
-            'is_active',
-            'created_at',
-            'updated_at',
-        ]
+        fields = '__all__'
+
+# class DepartmentSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Department
+#         fields = [
+#             'department_id',
+#             'department_name',
+#             'description',
+#             'created_at',
+#         ]
+# class EmployeeSerializer(serializers.ModelSerializer):
+#     department_name = serializers.CharField(
+#         source='department.department_name',
+#         read_only=True
+#     )
+
+#     class Meta:
+#         model = Employee
+#         fields = [
+#             'employee_id',
+#             'employee_name',
+#             'email',
+#             'phone',
+#             'designation',
+#             'salary',
+#             'date_of_joining',
+#             'department',
+#             'department_name',
+#             'photo',
+#             'is_active',
+#             'created_at',
+#             'updated_at',
+#         ]
