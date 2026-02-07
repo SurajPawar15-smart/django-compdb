@@ -1,67 +1,21 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from django.shortcuts import get_object_or_404
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.filters import SearchFilter
-from django.db.models import Q
 from .models import Department, Employee
 from .serializers import DepartmentSerializer, EmployeeSerializer
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 from .serializers import RegisterSerializer
-
-# class RegisterAPIView(APIView):
-#     permission_classes = [AllowAny]
-
-#     def post(self, request):
-#         serializer = RegisterSerializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         serializer.save()
-#         return Response({"message": "User registered successfully"})
-
-# class LoginAPIView(APIView):
-#     permission_classes = [AllowAny]
-
-#     def post(self, request):
-#         from django.contrib.auth import authenticate
-
-#         user = authenticate(
-#             username=request.data.get('username'),
-#             password=request.data.get('password')
-#         )
-
-#         if not user:
-#             return Response({"error": "Invalid credentials"}, status=401)
-
-#         refresh = RefreshToken.for_user(user)
-
-#         return Response({
-#             "access": str(refresh.access_token),
-#             "refresh": str(refresh),
-#         })
-
-
-# class LogoutAPIView(APIView):
-#     permission_classes = [IsAuthenticated]
-
-#     def post(self, request):
-#         try:
-#             refresh_token = request.data["refresh"]
-#             token = RefreshToken(refresh_token)
-#             token.blacklist()
-#             return Response({"message": "Logged out successfully"})
-#         except Exception:
-#             return Response({"error": "Invalid token"}, status=400)
-
+from django.shortcuts import get_object_or_404
+from django.db.models import Q
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.parsers import MultiPartParser, FormParser
 
 # ================== REGISTER ==================
 class RegisterAPIView(APIView):
@@ -152,28 +106,6 @@ class LogoutAPIView(APIView):
             return Response({"message": "Logged out successfully"}, status=status.HTTP_200_OK)
         except Exception:
             return Response({"error": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
-            
-from django.shortcuts import get_object_or_404
-from django.db.models import Q
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.pagination import PageNumberPagination
-from rest_framework.parsers import MultiPartParser, FormParser
-from drf_yasg.utils import swagger_auto_schema
-
-from .models import Department, Employee
-from .serializers import DepartmentSerializer, EmployeeSerializer
-
-# views.py
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
-from .models import Department, Employee
-from .serializers import DepartmentSerializer, EmployeeSerializer
 
 # ================== PAGINATION ==================
 class StandardResultsSetPagination(PageNumberPagination):
@@ -336,4 +268,3 @@ class EmployeeDetailAPIView(APIView):
             return Response({"error": "Employee not found"}, status=status.HTTP_404_NOT_FOUND)
         employee.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
