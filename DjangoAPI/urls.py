@@ -10,7 +10,8 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-# Swagger schema view (OUTSIDE urlpatterns)
+
+# Swagger schema view
 schema_view = get_schema_view(
     openapi.Info(
         title="Employee Management API",
@@ -24,17 +25,15 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('EmployeeApp.urls')),
+    path('api/', include('EmployeeApp.urls')),  # Include your app APIs
 
-    # 🔹 Swagger URLs
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0)),
-    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0)),
+    # 🔹 Swagger & Redoc
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='redoc'),
 
-     # JWT APIs
+    # 🔹 JWT Authentication
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0)),
 ]
 
 # 🔹 Serve media files in development
