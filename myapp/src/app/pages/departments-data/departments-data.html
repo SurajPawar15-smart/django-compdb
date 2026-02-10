@@ -1,0 +1,154 @@
+<div class="container mt-4">
+  <!-- 🔹 SUCCESS/ERROR ALERTS -->
+  <div *ngIf="successMessage"
+    class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+    {{ successMessage }}
+    <button type="button" class="btn-close" (click)="successMessage = ''"
+      title="Close alert"></button>
+  </div>
+
+  <div *ngIf="errorMessage"
+    class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+    {{ errorMessage }}
+    <button type="button" class="btn-close" (click)="errorMessage = ''"
+      title="Close alert"></button>
+  </div>
+
+  <div class="row">
+
+    <!-- 🔹 TABLE SECTION -->
+    <div class="col-md-8">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">
+            Department List
+            <span *ngIf="isLoading"
+              class="spinner-border spinner-border-sm ms-2" role="status"
+              aria-hidden="true"></span>
+          </h5>
+        </div>
+
+        <div class="card-body">
+          <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+              <tr>
+                <th>#</th>
+                <th>Department Name</th>
+                <th>Description</th>
+                <th width="150">Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let dept of departmentList; index as i">
+                <td>{{ i + 1 }}</td>
+                <td>{{ dept.department_name }}</td>
+                <td>{{ dept.description }}</td>
+                <td>
+                  <button
+                    class="btn btn-sm btn-warning me-1"
+                    (click)="onEdit(dept)"
+                    [disabled]="isLoading">
+                    Edit
+                  </button>
+                  <button
+                    class="btn btn-sm btn-danger"
+                    (click)="onDelete(dept.department_id!)"
+                    [disabled]="isLoading">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+
+              <tr *ngIf="departmentList.length === 0 && !isLoading">
+                <td colspan="4" class="text-center text-muted">
+                  No departments found
+                </td>
+              </tr>
+
+              <tr *ngIf="isLoading">
+                <td colspan="4" class="text-center">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🔹 FORM SECTION -->
+    <div class="col-md-4">
+      <div class="card shadow" [ngClass]="{ 'border-warning': isEditMode }">
+        <div
+          [ngClass]="isEditMode ? 'bg-warning text-dark' : 'bg-success text-white'"
+          class="card-header">
+          <h5 class="mb-0">
+            {{ isEditMode ? '✏️ Edit Department' : '➕ Add Department' }}
+          </h5>
+        </div>
+
+        <div class="card-body">
+          <form [formGroup]="departmentForm" (ngSubmit)="onSubmit()">
+
+            <div class="mb-3">
+              <label class="form-label">Department Name</label>
+              <input
+                type="text"
+                id="departmentName"
+                class="form-control"
+                placeholder="Enter department name"
+                formControlName="department_name" />
+              <small class="text-danger"
+                *ngIf="departmentForm.get('department_name')?.touched &&
+                       departmentForm.get('department_name')?.invalid">
+                Department name is required
+              </small>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Description</label>
+              <textarea
+                rows="3"
+                class="form-control"
+                placeholder="Enter Description"
+                formControlName="description"></textarea>
+              <small class="text-danger"
+                *ngIf="departmentForm.get('description')?.touched &&
+                       departmentForm.get('description')?.invalid">
+                Description is required
+              </small>
+            </div>
+
+            <div class="d-flex gap-2">
+              <button
+                type="submit"
+                class="btn btn-primary w-100"
+                [disabled]="departmentForm.invalid || isLoading">
+                <span *ngIf="!isLoading">{{ isEditMode ? 'Update' : 'Save'
+                  }}</span>
+                <span *ngIf="isLoading">
+                  <span class="spinner-border spinner-border-sm me-2"
+                    role="status" aria-hidden="true"></span>
+                  Processing...
+                </span>
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-secondary w-100"
+                (click)="resetForm()"
+                [disabled]="isLoading">
+                Reset
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

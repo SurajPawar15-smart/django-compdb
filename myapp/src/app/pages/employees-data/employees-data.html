@@ -1,0 +1,188 @@
+<div class="container">
+  <h1>Employee Management</h1>
+
+  <!-- Add/Edit Employee Form -->
+  <div class="form-section">
+    <button (click)="toggleForm()" class="btn btn-primary mb-3">
+      {{ showForm ? 'Hide Form' : 'Add New Employee' }}
+    </button>
+
+    <div *ngIf="showForm" class="form-container">
+      <h2>{{ editingId ? 'Edit Employee' : 'Add New Employee' }}</h2>
+      <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="employee_name">Employee Name:</label>
+          <input
+            type="text"
+            id="employee_name"
+            formControlName="employee_name"
+            class="form-control"
+            placeholder="Enter employee name" />
+          <small class="error"
+            *ngIf="employee_name?.invalid && employee_name?.touched">
+            <p *ngIf="employee_name?.errors?.['required']">Employee name is
+              required</p>
+            <p *ngIf="employee_name?.errors?.['minlength']">Minimum 3 characters
+              required</p>
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            class="form-control"
+            placeholder="Enter email" />
+          <small class="error" *ngIf="email?.invalid && email?.touched">
+            <p *ngIf="email?.errors?.['required']">Email is required</p>
+            <p *ngIf="email?.errors?.['email']">Please enter a valid email</p>
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Phone:</label>
+          <input
+            type="text"
+            id="phone"
+            formControlName="phone"
+            class="form-control"
+            placeholder="Enter 10-digit phone number" />
+          <small class="error" *ngIf="phone?.invalid && phone?.touched">
+            <p *ngIf="phone?.errors?.['required']">Phone is required</p>
+            <p *ngIf="phone?.errors?.['pattern']">Phone must be 10 digits</p>
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="date_of_joining">Date of Joining:</label>
+          <input
+            type="date"
+            id="date_of_joining"
+            formControlName="date_of_joining"
+            class="form-control" />
+          <small class="error"
+            *ngIf="date_of_joining?.invalid && date_of_joining?.touched">
+            <p *ngIf="date_of_joining?.errors?.['required']">Date of joining is
+              required</p>
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="salary">Salary:</label>
+          <input
+            type="text"
+            id="salary"
+            formControlName="salary"
+            class="form-control"
+            placeholder="Enter salary (numeric)" />
+          <small class="error" *ngIf="salary?.invalid && salary?.touched">
+            <p *ngIf="salary?.errors?.['required']">Salary is required</p>
+            <p *ngIf="salary?.errors?.['pattern']">Please enter a valid
+              salary</p>
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="designation">Designation:</label>
+          <input
+            type="text"
+            id="designation"
+            formControlName="designation"
+            class="form-control"
+            placeholder="Enter designation" />
+          <small class="error"
+            *ngIf="designation?.invalid && designation?.touched">
+            <p *ngIf="designation?.errors?.['required']">Designation is
+              required</p>
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="department">Department ID:</label>
+          <input
+            type="number"
+            id="department"
+            formControlName="department"
+            class="form-control"
+            placeholder="Enter department ID" />
+          <small class="error"
+            *ngIf="department?.invalid && department?.touched">
+            <p *ngIf="department?.errors?.['required']">Department is
+              required</p>
+          </small>
+        </div>
+
+        <div class="form-group checkbox">
+          <label for="is_active">
+            <input
+              type="checkbox"
+              id="is_active"
+              formControlName="is_active" />
+            Active
+          </label>
+        </div>
+
+        <div class="form-buttons">
+          <button type="submit" class="btn btn-success"
+            [disabled]="employeeForm.invalid">
+            {{ editingId ? 'Update' : 'Create' }}
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="resetForm()">
+            Reset
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Employees Table -->
+  <div class="table-section">
+    <h2>Employee List ({{ employees.length }})</h2>
+    <div *ngIf="employees.length === 0" class="no-data">
+      <p>No employees found. Add a new employee to get started.</p>
+    </div>
+
+    <table *ngIf="employees.length > 0" class="employees-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Date of Joining</th>
+          <th>Salary</th>
+          <th>Designation</th>
+          <th>Active</th>
+          <th>Department</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let employee of employees">
+          <td>{{ employee.id }}</td>
+          <td>{{ employee.employee_name }}</td>
+          <td>{{ employee.email }}</td>
+          <td>{{ employee.phone }}</td>
+          <td>{{ employee.date_of_joining }}</td>
+          <td>{{ employee.salary }}</td>
+          <td>{{ employee.designation }}</td>
+          <td>
+            <span
+              [ngClass]="{ 'badge badge-active': employee.is_active, 'badge badge-inactive': !employee.is_active }">
+              {{ employee.is_active ? 'Yes' : 'No' }}
+            </span>
+          </td>
+          <td>{{ employee.department }}</td>
+          <td class="actions">
+            <button (click)="editEmployee(employee)"
+              class="btn btn-edit">Edit</button>
+            <button (click)="deleteEmployee(employee.id)"
+              class="btn btn-delete">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

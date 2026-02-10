@@ -1,0 +1,29 @@
+.card {
+  border: none;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
+}
+
+.table-hover tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.btn-warning,
+.btn-danger {
+  transition: transform 0.2s ease;
+}
+
+.btn-warning:hover,
+.btn-danger:hover {
+  transform: scale(1.1);
+}
+
+textarea.form-control {
+  resize: none;
+}
